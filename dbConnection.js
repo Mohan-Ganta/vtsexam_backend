@@ -5,6 +5,6 @@ const connection = mysql2.createPool({
     port: 3306, 
     user: process.env.USER_NAME,
     password: process.env.DB_PWD,
-    database: 'vtsassessment'
+    database: 'vtsexamportal'
 }).promise();
 module.exports = connection;

@@ -14,7 +14,7 @@ const generateRandomPassword = (length) => {
 
 router.post('/assessments', async (req, res) => {
   const { name, drivedate } = req.body;
-
+  console.log(name,drivedate)
   const formattedDate = new Date(drivedate).toISOString().split('T')[0];
 
   const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATE, students VARCHAR(255))';
@@ -106,7 +106,7 @@ async function createQuestionTableIfNotExists() {
 }
 
 
-router.get('/startassessment', async (req, res) => {
+router.get('/:id/startassessment', async (req, res) => {
   const currentTime = new Date();
   const targetTime = new Date();
   targetTime.setHours(21, 34, 0, 0);

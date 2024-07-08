@@ -5,7 +5,7 @@ const sendLoginCredentialsMail = async (name,email) => {
         to: email,
         subject: 'Successful Registration for Recruitment Drive at VTS Enterprises India Private Limited',
         html: `
-            <div>
+           <div>
   <img
     style="width:100%;height:auto;margin-bottom:4px"
     src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1718889255/vts-banner-img_cwfluq.png"
@@ -17,46 +17,39 @@ const sendLoginCredentialsMail = async (name,email) => {
       Dear ${name},
     </p>
     <p>
-      We are pleased to inform you that your registration for the recruitment drive at <strong>VTS Enterprises India Private Limited</strong> has been completed successfully.
+      Thank you for choosing <strong>VTS Enterprises India Private Limited</strong>. We are delighted to inform you that you have successfully registered for our <strong>Recruitment Drive</strong>.
     </p>
+    <h3>Next Steps:</h3>
     <p>
-      We appreciate your interest in participating in this drive. You will soon receive an email with your login details, including the link of Assessment and further instructions.
-    </p>
-    <p>
-      The interview process will include the following stages:
+      You will soon receive an email containing:
     </p>
     <ul>
-      <strong>
-      <li>Aptitude Round</li>
-      <li>Group Discussion (GD) or Coding Round</li>
-      <li>Technical Round</li>
-      <li>HR Round</li>
-      </strong>
+      <li><strong>Assessment Link</strong></li>
+      <li><strong>Login Credentials</strong></li>
+      <li><strong>Exam Instructions</strong></li>
     </ul>
+    <h3>Recruitment Process Rounds:</h3>
+    <ol>
+      <li><strong>Aptitude Round</strong></li>
+      <li><strong>Group Discussion or Coding Round</strong></li>
+      <li><strong>Technical Round</strong></li>
+      <li><strong>HR Round</strong></li>
+    </ol>
+    <h3>Important Actions:</h3>
+    <ul>
+      <li><strong>Check your email regularly</strong> for further instructions and updates.</li>
+      <li>For any technical issues or questions regarding the assessment, contact us at <strong>blahblahblah@gmail.com</strong>.</li>
+    </ul>
+    <h3>Learn More About Us:</h3>
     <p>
-      Please keep an eye on your inbox for the login details and additional updates.
+      Visit our website: <a href="http://vtsenterprisesindia.com">vtsenterprisesindia.com</a>
     </p>
-    <p>
-      Thank you once again for your interest, and we wish you the best of luck in the upcoming process.
-    </p>
-    
   </div>
   <div style="padding:10px;margin-top:20px;">
-  <p>
-      Best Regards,
-    </p>
-    <p>
-      HR Team,
-    </p>
-    <p>
-      <strong>VTS Enterprises India Private Limited</strong>
-    </p>
-    
-    <p>
-      <i>
-        This is an automated message. Please do not reply to this email.
-      </i>
-    </p>
+    <p>Best regards,</p>
+    <p>HR Team,</p>
+    <p><strong>VTS Enterprises India Private Limited</strong></p>
+    <p><i>This is an automated message. Please do not reply to this email.</i></p>
   </div>
 </div>
 

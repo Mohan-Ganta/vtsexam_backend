@@ -62,7 +62,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
         await sendSuccessfulRegMail(fullname, email);
-
+        console.log()
         res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
     } catch (error) {
         console.error('Error inserting data:', error);
