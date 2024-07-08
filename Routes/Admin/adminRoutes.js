@@ -138,7 +138,7 @@ router.post('/:id/startassessment', async (req, res) => {
 
   // setTimeout(scheduleTask, delay);
   const {studentData} = req.body
-  const assessmentLink = `http://localhost:3000/vts-assessment/${req.params.id}/login`
+  const assessmentLink = `BASE_URL/vts-assessment/${req.params.id}/login`
   for(var i =0;i<studentData.length;i++)
   {
     const email = studentData[i].email
