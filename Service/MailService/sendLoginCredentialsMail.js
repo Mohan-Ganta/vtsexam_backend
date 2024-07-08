@@ -1,33 +1,44 @@
 const mailSender = require("./Mailservice")
 
-async function sendAssessmentEmail(candidateName, candidateEmail, assessmentLink, generatedPassword) {
+async function sendAssessmentEmail(candidateName, college_Id, assessmentLink, generatedPassword,email) {
    
 
     let info = await mailSender.sendMail({
-        from: '"Assessment Portal" <your-email@example.com>',
-        to: "tempabc70759@gmail.com",
+        from: 'tempabc70759@gmail.com',
+        to: email,
         subject: 'Your Assessment Login Details',
         html: `
+        <div>
+        <img
+    style="width:100%;height:auto;margin-bottom:4px"
+    src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1718889255/vts-banner-img_cwfluq.png"
+    alt="vts-banner-image"
+  ></img>
             <p>Hello ${candidateName},</p>
-            <p>Here are your login details for the assessment portal:</p>
-            <ul>
-                <li>Email: ${candidateEmail}</li>
-                <li>Password: ${generatedPassword} <span class="copy-icon" onclick="copyPassword('${generatedPassword}')">📋</span></li>
-            </ul>
-            <p>Please click the link below to access your assessment:</p>
-            <a href="${assessmentLink}">Assessment Link</a>
-            <p>Thank you!</p>
-            <script>
-                function copyPassword(password) {
-                    const el = document.createElement('textarea');
-                    el.value = password;
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
-                    alert('Password copied to clipboard!');
-                }
-            </script>
+<p>Thank you for choosing VTS Enterprises India Private Limited. We are pleased to inform you that upon your successful registration for our recruitment drive, you are now ready to take the assessment.</p>
+<p>Here are your login details for the assessment portal:</p>
+<ul>
+    <li>Username: <strong>${college_Id}</strong></li>
+    <li>Password: <strong>${generatedPassword} </strong></li>
+</ul>
+<p>Please click the link below to access your assessment:</p>
+<a href="${assessmentLink}">Assessment Link</a>
+
+<p><strong>Instructions:</strong></p>
+<ol>
+    <li>Please log in to the exam portal at least 15 minutes prior to the start of the assessment.</li>
+    <li>Ensure you have a stable internet and power connection. Any interruptions during the exam may lead to the termination of the assessment.</li>
+    <li>The assessment can only be taken on a desktop or a laptop.</li>
+    <li>Tab switching is not allowed. Any attempts to switch tabs will not be tolerated and may lead to the termination of the assessment.</li>
+    <li>You will be monitored throughout the exam. Please ensure that your camera and microphone are functioning properly.</li>
+</ol>
+<p>Wishing you the best of luck,</p>
+<p>HR Team<br>
+<strong>VTS Enterprises India Private Limited </strong></p>
+
+<p>This is an automated message. Please do not reply to this mail.</p>
+</div>
+
         `, 
     });
 

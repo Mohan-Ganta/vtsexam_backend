@@ -8,10 +8,5 @@ const connection = mysql2.createConnection({
     database: 'vtsassessment'
 }).promise();
 
-connection.connect((err)=>{
-    if(err)
-    console.log(err)
-    else
-    console.log("ok bhayya")
-})
+
 module.exports = connection;

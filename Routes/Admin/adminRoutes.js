@@ -6,6 +6,9 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const crypto = require('crypto');
+const sendLoginCredentialsMail = require('../../Service/MailService/sendLoginCredentialsMail');
+
+const { send } = require('process');
 
 const generateRandomPassword = (length) => {
   return crypto.randomBytes(length).toString('hex').slice(0, length);
@@ -90,7 +93,7 @@ async function createQuestionTableIfNotExists() {
       id INT AUTO_INCREMENT PRIMARY KEY,
       assessmentId VARCHAR(255) NOT NULL,
       Image VARCHAR(255),
-      Questions TEXT NOT NULL,
+      Questions TEXT DEFAULT NULL,
       Opts TEXT,
       Solution TEXT NOT NULL,
       Answer VARCHAR(255) DEFAULT NULL
@@ -105,30 +108,56 @@ async function createQuestionTableIfNotExists() {
   }
 }
 
+const getStudentData = async (email)=>{
+  const searchQuery = 'SELECT * FROM user WHERE email=?'
+  const [result] = await connection.query(searchQuery,[email])
+  return result
 
-router.get('/:id/startassessment', async (req, res) => {
-  const currentTime = new Date();
-  const targetTime = new Date();
-  targetTime.setHours(21, 34, 0, 0);
-  console.log(currentTime)
-  console.log(targetTime)
-  if (currentTime >= targetTime) {
-    targetTime.setDate(targetTime.getDate() + 1);
+}
+router.post('/:id/startassessment', async (req, res) => {
+  // const currentTime = new Date();
+  // const targetTime = new Date();
+  // targetTime.setHours(21, 34, 0, 0);
+  // console.log(currentTime)
+  // console.log(targetTime)
+  // if (currentTime >= targetTime) {
+  //   targetTime.setDate(targetTime.getDate() + 1);
+  // }
+  // const delay = targetTime - currentTime;
+  // console.log(`exam will start after ${delay}`)
+
+  // const scheduleTask = async () => {
+  //   try {
+  //     console.log("Assesment is started");
+  //     res.send('Assessment started and questions have been sent.');
+  //   } catch (error) {
+  //     console.error('Error starting assessment:', error);
+  //     res.status(500).send('Error starting assessment');
+  //   }
+  // };
+
+  // setTimeout(scheduleTask, delay);
+  const {studentData} = req.body
+  const assessmentLink = `http://localhost:3000/vts-assessment/${req.params.id}/login`
+  for(var i =0;i<studentData.length;i++)
+  {
+    const email = studentData[i].email
+    console.log("Email received.....................",email)
+    const data = await getStudentData(email)
+    console.log("data of the student ..................",data[0])
+    const name = data[0].fullname
+    const pwd = data[0].randomPassword
+    const college_Id = data[0].college_Id
+    await sendLoginCredentialsMail(name,college_Id,assessmentLink,pwd,email)
+    .then(res=>console.log("email sent to " , name))
+    .catch(err=>console.log("error sending mail"))
+
   }
-  const delay = targetTime - currentTime;
-  console.log(`exam will start after ${delay}`)
+  console.log("hogaya")
+  
+    
 
-  const scheduleTask = async () => {
-    try {
-      console.log("Assesment is started");
-      res.send('Assessment started and questions have been sent.');
-    } catch (error) {
-      console.error('Error starting assessment:', error);
-      res.status(500).send('Error starting assessment');
-    }
-  };
-
-  setTimeout(scheduleTask, delay);
+  
 
 });
 router.get('/getassessments', async (req, res) => {
