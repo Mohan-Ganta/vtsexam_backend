@@ -89,6 +89,7 @@ const checkLoginTime = (req, res, next) => {
 router.post('/:assessmentId/login', async (req, res) => {
     try {
         const { college_Id, password } = req.body;
+        console.log(req.body)
         const assessmentId = req.params.assessmentId;
         const query = 'SELECT * FROM user WHERE college_Id = ? AND randomPassword = ?';
         const [user] = await connection.query(query, [college_Id, password]);

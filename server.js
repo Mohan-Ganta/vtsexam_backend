@@ -15,6 +15,10 @@ app.get('/sendmail',async (req,res)=>{
 //    await sendLoginDetails("kotesh","tempabc70759@gmail","www.google.com","123kote45")
    res.send("mail sent bhayya")
 })
+
+app.get("/",(req,res)=>{
+    res.send("Hello guru")
+})
 app.listen(5000,()=>{
     console.log("Server is running at port 5000")
 })
