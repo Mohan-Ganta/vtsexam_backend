@@ -15,41 +15,12 @@ const generateRandomPassword = (length) => {
 };
 
 
-// router.post('/assessments', async (req, res) => {
-//   const { name, drivedate } = req.body;
-//   console.log(name,drivedate)
-//   const formattedDate = new Date(drivedate).toISOString().split('T')[0];
-
-//   const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATE, students VARCHAR(255))';
-//   await connection.query(query1);
-
-//   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
-
-//   let newAssessmentId = "VTSAS0001";
-
-//   if (latestAssessmentId && latestAssessmentId.length > 0) {
-//     const assessment = latestAssessmentId[0].assessmentid;
-//     const numericPart = assessment.match(/\d+/g).join('');
-//     const currentId = parseInt(numericPart, 10);
-//     const newId = currentId + 1;
-//     newAssessmentId = `VTSAS${String(newId).padStart(4, '0')}`;
-//   }
-
-//   const query3 = 'INSERT INTO assessmentids (assessmentid, name, drivedate, students) VALUES (?, ?, ?, ?)';
-//   await connection.query(query3, [newAssessmentId, name, formattedDate, 0]);
-
-//   res.status(201).json({
-//     assessmentid: newAssessmentId,
-//     name: name,
-//     drivedate: formattedDate
-//   });
-// });
 router.post('/assessments', async (req, res) => {
   const { name, drivedate } = req.body;
-  console.log(name, drivedate);
-  const formattedDate = new Date(drivedate).toISOString().replace('T', ' ').slice(0, 19);
+  console.log(name,drivedate)
+  const formattedDate = new Date(drivedate).toISOString().split('T')[0];
 
-  const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATETIME, students VARCHAR(255))';
+  const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATE, students VARCHAR(255))';
   await connection.query(query1);
 
   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
@@ -73,6 +44,35 @@ router.post('/assessments', async (req, res) => {
     drivedate: formattedDate
   });
 });
+// router.post('/assessments', async (req, res) => {
+//   const { name, drivedate } = req.body;
+//   console.log(name, drivedate);
+//   const formattedDate = new Date(drivedate).toISOString().replace('T', ' ').slice(0, 19);
+
+//   const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATETIME, students VARCHAR(255))';
+//   await connection.query(query1);
+
+//   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
+
+//   let newAssessmentId = "VTSAS0001";
+
+//   if (latestAssessmentId && latestAssessmentId.length > 0) {
+//     const assessment = latestAssessmentId[0].assessmentid;
+//     const numericPart = assessment.match(/\d+/g).join('');
+//     const currentId = parseInt(numericPart, 10);
+//     const newId = currentId + 1;
+//     newAssessmentId = `VTSAS${String(newId).padStart(4, '0')}`;
+//   }
+
+//   const query3 = 'INSERT INTO assessmentids (assessmentid, name, drivedate, students) VALUES (?, ?, ?, ?)';
+//   await connection.query(query3, [newAssessmentId, name, formattedDate, 0]);
+
+//   res.status(201).json({
+//     assessmentid: newAssessmentId,
+//     name: name,
+//     drivedate: formattedDate
+//   });
+// });
 
 
 router.post('/:assessmentId/uploadquestions', upload.single('file'), async (req, res) => {
