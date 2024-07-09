@@ -61,7 +61,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         `;
         const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
-        const assessmentLink = `${process.env.TEST_LINK}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
+        const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
         await sendSuccessfulRegMail(email,assessmentLink);
         console.log()
         res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
