@@ -4,8 +4,8 @@ const mailSender = nodemailer.createTransport(
   {
     service: 'gmail',
     auth: {
-      user: process.env.MAIL,
-      pass: process.env.PASS_KEY,
+      user: "techteam@vtsenterprisesindia.com",
+      pass: "rsojdzacxacpdmeh",
     },
   }
 )
