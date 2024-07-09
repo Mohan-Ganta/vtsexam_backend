@@ -222,4 +222,16 @@ router.get("/:assessmentId/getreports",async (req,res)=>{
   const [results] = await connection.query(reportsQuery,[req.params.assessmentId])
   res.status(200).json(results)
 })
+
+
+router.post('/feedback',async (req,res)=>{
+  const {assessmentId,name,feedback,rating} = req.body
+  const query1 = 'CREATE TABLE IF NOT EXISTS feedback (assessmentid VARCHAR(255) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, feedback TEXT DEFAULT NULL, rating VARCHAR(255) DEFAULT NULL)';
+  await connection.query(query1);
+  const query3 = 'INSERT INTO feedback (assessmentid, name, feedback, rating) VALUES (?, ?, ?, ?)';
+  await connection.query(query3, [assessmentId,name,feedback,rating]);
+
+  res.status(201).json("thank you");
+
+})
 module.exports = router;
