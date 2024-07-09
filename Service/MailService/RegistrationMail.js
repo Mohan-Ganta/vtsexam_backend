@@ -31,14 +31,14 @@ const sendLoginCredentialsMail = async (email,assesmentLink) => {
       <li>The assessment consists of 60 questions and will include the following sections:</li>
     </ol>
     <ul style="list-style-type:none;padding:0;">
-      <li style="background:#f9f9f9;margin:5px auto;padding:6px;border-radius:5px;">• ARITHMETIC – 30 Questions</li>
-      <li style="background:#f9f9f9;margin:5px auto;padding:6px;border-radius:5px;">• LOGICAL – 15 Questions</li>
-      <li style="background:#f9f9f9;margin:5px auto;padding:6px;border-radius:5px;">• VERBAL – 15 Questions</li>
+      <li style="background:#f9f9f9;margin:5px 30px;padding:6px;border-radius:5px;">• ARITHMETIC – 30 Questions</li>
+      <li style="background:#f9f9f9;margin:5px 30px;padding:6px;border-radius:5px;">• LOGICAL – 15 Questions</li>
+      <li style="background:#f9f9f9;margin:5px 30px;padding:6px;border-radius:5px;">• VERBAL – 15 Questions</li>
     </ul>
     <ol start="8" style="padding-left:20px;">
       <li>The student will have 60 minutes to answer the 60 questions. The examination will automatically be submitted after the given time expires.</li>
     </ol>
-    <p><strong>Assessment Link</strong> : <a href=${assesmentLink} >click here</a></p>
+    <p style="background-color:yellow;"><strong>Assessment Link</strong> : <a href=${assesmentLink} >click here</a></p>
     <p>We wish you the best of luck. Stay calm, read each question carefully and give it your best effort. If you have any further queries or need assistance, contact us at <a href="mailto:talent@vtsenterprisesindia.com">talent@vtsenterprisesindia.com</a>.</p>
   </div>
   <div style="padding:10px;margin-top:20px;">
