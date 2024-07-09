@@ -1,7 +1,7 @@
 const mailSender = require("../MailService/Mailservice")
 const sendLoginCredentialsMail = async (name,email) => {
     const mailOptions = {
-        from: 'tempabc70759@gmail.com',
+        from: 'techteam@vtsenterprisesindia.com',
         to: email,
         subject: 'Successful Registration for Recruitment Drive at VTS Enterprises India Private Limited',
         html: `
