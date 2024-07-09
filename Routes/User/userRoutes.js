@@ -107,12 +107,12 @@ router.post('/:assessmentId/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        // if (user[0].login_state) {
-        //     return res.status(403).json({ error: 'Multiple logins are not encouraged' });
-        // }
+        if (user[0].login_state) {
+            return res.status(403).json({ error: 'Multiple logins are not encouraged' });
+        }
 
-        // const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
-        // await connection.query(updateQuery, [user[0].id]);
+        const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
+        await connection.query(updateQuery, [user[0].id]);
 
         res.status(200).json({ message: 'Login successful', user: user[0] });
     } catch (error) {
