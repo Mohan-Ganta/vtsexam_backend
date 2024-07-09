@@ -15,12 +15,41 @@ const generateRandomPassword = (length) => {
 };
 
 
+// router.post('/assessments', async (req, res) => {
+//   const { name, drivedate } = req.body;
+//   console.log(name,drivedate)
+//   const formattedDate = new Date(drivedate).toISOString().split('T')[0];
+
+//   const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATE, students VARCHAR(255))';
+//   await connection.query(query1);
+
+//   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
+
+//   let newAssessmentId = "VTSAS0001";
+
+//   if (latestAssessmentId && latestAssessmentId.length > 0) {
+//     const assessment = latestAssessmentId[0].assessmentid;
+//     const numericPart = assessment.match(/\d+/g).join('');
+//     const currentId = parseInt(numericPart, 10);
+//     const newId = currentId + 1;
+//     newAssessmentId = `VTSAS${String(newId).padStart(4, '0')}`;
+//   }
+
+//   const query3 = 'INSERT INTO assessmentids (assessmentid, name, drivedate, students) VALUES (?, ?, ?, ?)';
+//   await connection.query(query3, [newAssessmentId, name, formattedDate, 0]);
+
+//   res.status(201).json({
+//     assessmentid: newAssessmentId,
+//     name: name,
+//     drivedate: formattedDate
+//   });
+// });
 router.post('/assessments', async (req, res) => {
   const { name, drivedate } = req.body;
-  console.log(name,drivedate)
-  const formattedDate = new Date(drivedate).toISOString().split('T')[0];
+  console.log(name, drivedate);
+  const formattedDate = new Date(drivedate).toISOString().replace('T', ' ').slice(0, 19);
 
-  const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATE, students VARCHAR(255))';
+  const query1 = 'CREATE TABLE IF NOT EXISTS assessmentids (assessmentid VARCHAR(255), name VARCHAR(255), drivedate DATETIME, students VARCHAR(255))';
   await connection.query(query1);
 
   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
@@ -169,7 +198,19 @@ router.get('/getassessments', async (req, res) => {
     res.status(500).send('Error retrieving assessments');
   }
 });
-
+router.get('/:assessmentId/start-time', async (req, res) => {
+  const { assessmentId } = req.params;
+  try {
+    const [assessment] = await connection.query('SELECT drivedate FROM assessmentids WHERE assessmentid = ?', [assessmentId]);
+    if (assessment.length === 0) {
+      return res.status(404).send('Assessment not found');
+    }
+    res.status(200).json({ startTime: assessment[0].drivedate });
+  } catch (error) {
+    console.error('Error retrieving start time:', error);
+    res.status(500).send('Error retrieving start time');
+  }
+});
 router.get("/:assessmentId/getQuestions",async (req,res)=>{
   const qnQuery = 'SELECT * FROM question WHERE assessmentId = ?'
   const [questions] = await connection.query(qnQuery,[req.params.assessmentId])
