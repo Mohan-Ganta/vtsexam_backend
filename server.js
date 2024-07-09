@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const adminRoutes = require('./Routes/Admin/adminRoutes')
 const userRuoutes = require('./Routes/User/userRoutes')
-const sendMail = require('./Service/MailService/RegistrationMail')
+const sendSuccessfulRegMail = require('./Service/MailService/RegistrationMail')
 const sendLoginDetails = require("./Service/MailService/sendLoginCredentialsMail")
 const app = express()
 require('dotenv').config()
@@ -11,9 +11,9 @@ app.use(express.json());
 app.use('/admin',adminRoutes)
 app.use('/candidates',userRuoutes)
 app.get('/sendmail',async (req,res)=>{
-//    await  sendMail("Kotesh","tempabc70759@gmail.com")
-   await sendLoginDetails("kotesh","tempabc70759@gmail","www.google.com","123kote45","sweetysurarapu@gmail.com")
-   res.send("mail sent bhayya")
+    const assessmentLink = `${process.env.TEST_LINK}/vts-drive2025/VTSAS0001/20KD1A05D1/650c2f2d`
+    await sendSuccessfulRegMail("tempabc70759@gmail.com",assessmentLink);
+    res.send("mail sent")
 })
 
 app.get("/",(req,res)=>{

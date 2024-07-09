@@ -61,7 +61,8 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         `;
         const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
-        await sendSuccessfulRegMail(fullname, email);
+        const assessmentLink = `${process.env.TEST_LINK}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
+        await sendSuccessfulRegMail(email,assessmentLink);
         console.log()
         res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
     } catch (error) {
@@ -76,7 +77,6 @@ const checkLoginTime = (req, res, next) => {
     loginEndTime.setHours(11, 0, 0);
 
     const currentTime = new Date();
-
     if (currentTime >= loginStartTime && currentTime <= loginEndTime) {
         next();
     } else if (currentTime < loginStartTime) {
@@ -85,6 +85,15 @@ const checkLoginTime = (req, res, next) => {
         res.status(403).json({ error: 'Assessment has already started.' });
     }
 };
+
+router.get('/:assessmentId/:stdId/getdetails',async (req,res)=>{
+    const assessmentId = req.params.assessmentId
+    const college_Id = req.params.stdId
+    const query = 'SELECT * FROM user WHERE college_Id = ? AND assessmentId = ?';
+    const [user] = await connection.query(query, [college_Id, assessmentId]);
+    res.json(user)
+})
+
 
 router.post('/:assessmentId/login', async (req, res) => {
     try {
@@ -98,12 +107,12 @@ router.post('/:assessmentId/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        if (user[0].login_state) {
-            return res.status(403).json({ error: 'Multiple logins are not encouraged' });
-        }
+        // if (user[0].login_state) {
+        //     return res.status(403).json({ error: 'Multiple logins are not encouraged' });
+        // }
 
-        const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
-        await connection.query(updateQuery, [user[0].id]);
+        // const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
+        // await connection.query(updateQuery, [user[0].id]);
 
         res.status(200).json({ message: 'Login successful', user: user[0] });
     } catch (error) {
