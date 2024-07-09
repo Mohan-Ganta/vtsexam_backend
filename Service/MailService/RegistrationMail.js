@@ -38,7 +38,7 @@ const sendLoginCredentialsMail = async (name,email) => {
     <h3>Important Actions:</h3>
     <ul>
       <li><strong>Check your email regularly</strong> for further instructions and updates.</li>
-      <li>For any technical issues or questions regarding the assessment, contact us at <strong>blahblahblah@gmail.com</strong>.</li>
+      <li>For any technical issues or questions regarding the assessment, contact us at <strong>techteam@vtsenterprisesindia.com</strong>.</li>
     </ul>
     <h3>Learn More About Us:</h3>
     <p>
