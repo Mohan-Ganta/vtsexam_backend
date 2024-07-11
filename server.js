@@ -5,6 +5,7 @@ const userRuoutes = require('./Routes/User/userRoutes')
 const sendSuccessfulRegMail = require('./Service/MailService/RegistrationMail')
 const sendLoginDetails = require("./Service/MailService/sendLoginCredentialsMail")
 const app = express()
+
 require('dotenv').config()
 app.use(cors())
 app.use(express.json());
