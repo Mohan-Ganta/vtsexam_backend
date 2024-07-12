@@ -67,7 +67,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
     } catch (error) {
         console.error('Error inserting data:', error);
-        res.status(500).json({ error: 'Error inserting data' });
+        res.status(500).json({ error: 'Error inserting data'});
     }
 });
 const checkLoginTime = (req, res, next) => {
@@ -107,12 +107,11 @@ router.post('/:assessmentId/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        if (user[0].login_state) {
-            return res.status(403).json({ error: 'Multiple logins are not encouraged' });
-        }
+        // if (user[0].login_state) {
+        //     return res.status(403).json({ error: 'Multiple logins are not encouraged' });
+        // }
 
-        const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
-        await connection.query(updateQuery, [user[0].id]);
+        
 
         res.status(200).json({ message: 'Login successful', user: user[0] });
     } catch (error) {
@@ -145,6 +144,14 @@ router.post('/:assessmentId/results', async (req, res) => {
         `;
 
         await connection.query(createResultsTableQuery);
+        const query = 'SELECT * FROM user WHERE college_Id = ?';
+        const [user] = await connection.query(query, [college_Id]);
+
+        if (user[0].login_state) {
+            return res.status(403).json({ error: 'Multiple logins are not encouraged' });
+        }
+        const updateQuery = 'UPDATE user SET login_state = TRUE WHERE id = ?';
+        await connection.query(updateQuery, [user[0].id]);
 
         const insertResultQuery = `
             INSERT INTO results (
