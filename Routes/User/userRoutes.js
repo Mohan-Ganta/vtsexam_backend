@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../../dbConnection');
 const crypto = require('crypto');
-const sendSuccessfulRegMail = require("../../Service/MailService/RegistrationMail");
+// const sendSuccessfulRegMail = require("../../Service/MailService/RegistrationMail");
 
 const generateRandomPassword = (length) => {
     return crypto.randomBytes(length).toString('hex').slice(0, length);
@@ -62,9 +62,9 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         const results = await connection.query(insertUserQuery, ["VTSAS0001", fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
         const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/VTSAS0001/${college_Id}/${randomPassword}`
-        await sendSuccessfulRegMail(email,assessmentLink);
-        console.log()
-        res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
+        // await sendSuccessfulRegMail(email,assessmentLink);
+        // res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
+        res.status(200).json(assessmentLink)
     } catch (error) {
         console.error('Error inserting data:', error);
         res.status(500).json({ error: 'Error inserting data'});
