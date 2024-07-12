@@ -145,7 +145,7 @@ router.post('/:assessmentId/results', async (req, res) => {
         await connection.query(createResultsTableQuery);
         const query = 'SELECT * FROM user WHERE college_Id = ?';
         const [user] = await connection.query(query, [collegeId]);
-
+        
         if (user[0].login_state) {
             return res.status(403).json({ error: 'Multiple logins are not encouraged' });
         }
