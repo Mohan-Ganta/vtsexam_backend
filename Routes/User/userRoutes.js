@@ -12,7 +12,7 @@ router.get('/getregistrations/:assessmentId', async (req, res) => {
     try {
         const assessmentId = req.params.assessmentId;
         const query = 'SELECT * FROM user WHERE assessmentId = ?';
-        const [users] = await connection.query(query, ["VTSAS0001"]);
+        const [users] = await connection.query(query, [assessmentId]);
 
         res.status(200).json(users);
     } catch (error) {
@@ -59,9 +59,9 @@ router.post('/:assessmentId/registrations', async (req, res) => {
                 assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const results = await connection.query(insertUserQuery, ["VTSAS0001", fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
+        const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
-        const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/VTSAS0001/${college_Id}/${randomPassword}`
+        const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
         // await sendSuccessfulRegMail(email,assessmentLink);
         // res.status(200).json({ message: 'Successfully inserted data', results, randomPassword });
         res.status(200).json(assessmentLink)
@@ -89,7 +89,7 @@ router.get('/:assessmentId/:stdId/getdetails',async (req,res)=>{
     const assessmentId = req.params.assessmentId
     const college_Id = req.params.stdId
     const query = 'SELECT * FROM user WHERE college_Id = ? AND assessmentId = ?';
-    const [user] = await connection.query(query, [college_Id, "VTSAS0001"]);
+    const [user] = await connection.query(query, [college_Id, assessmentId]);
     res.json(user)
 })
 
@@ -157,7 +157,7 @@ router.post('/:assessmentId/results', async (req, res) => {
                 assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const results = await connection.query(insertResultQuery, ["VTSAS0001", name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber]);
+        const results = await connection.query(insertResultQuery, [assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber]);
 
         res.status(200).json({ message: 'Successfully inserted results', results });
     } catch (error) {
