@@ -6,7 +6,8 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const crypto = require('crypto');
-const sendLoginCredentialsMail = require('../../Service/MailService/sendLoginCredentialsMail');
+// const sendLoginCredentialsMail = require('../../Service/MailService/sendLoginCredentialsMail');
+const sendAssessmentEmailtoStudent = require('../../Service/MailService/RegistrationMail')
 
 const { send } = require('process');
 
@@ -56,20 +57,20 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
   const users = xlsx.utils.sheet_to_json(worksheet);
 
   try {
-      connection.query('BEGIN');
+    connection.query('BEGIN');
 
-      // const [latestAsessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
-      // const assessmentId = latestAsessmentId[0].assessmentid;
-      // const driveDate = latestAsessmentId[0].drivedate;
-      // const randomPassword = generateRandomPassword(8);
+    // const [latestAsessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
+    // const assessmentId = latestAsessmentId[0].assessmentid;
+    // const driveDate = latestAsessmentId[0].drivedate;
+    // const randomPassword = generateRandomPassword(8);
 
-      //const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-      for (var i = 0; i < users.length; i++) {
-        const user = users[i];
-        const { Reg_Id,Name,Student_Email,Department} = user;
-        const assessmentId = req.params.assessmentId
-        const randomPassword = generateRandomPassword(8);
-        const createUserTableQuery = `
+    //const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    for (var i = 0; i < users.length; i++) {
+      const user = users[i];
+      const { Reg_Id, Name, Student_Email, Department } = user;
+      const assessmentId = req.params.assessmentId
+      const randomPassword = generateRandomPassword(8);
+      const createUserTableQuery = `
         CREATE TABLE IF NOT EXISTS user (
             id INT AUTO_INCREMENT PRIMARY KEY,
             assessmentId VARCHAR(255),
@@ -82,24 +83,24 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
             login_state BOOLEAN DEFAULT FALSE
         )
     `;
-    await connection.query(createUserTableQuery);
-        // const query1 = 'INSERT INTO user (Reg_Id,Name,randomPassword,Student_Email,Department) VALUES (?,?,?,?,?)';
-        // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
-        const insertUserQuery = `
+      await connection.query(createUserTableQuery);
+      // const query1 = 'INSERT INTO user (Reg_Id,Name,randomPassword,Student_Email,Department) VALUES (?,?,?,?,?)';
+      // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
+      const insertUserQuery = `
         INSERT INTO user (
             assessmentId, fullname, email, randomPassword, college_Id, college_name, dept
         ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", Department]);
-        console.log(results);
-      }
-      connection.query('COMMIT');
-      res.status(201).send("Successfully inserted data");
+      const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", Department]);
+      console.log(results);
+    }
+    connection.query('COMMIT');
+    res.status(201).send("Successfully inserted data");
 
   } catch (error) {
-      console.error('Error inserting data:', error);
-      await connection.query('ROLLBACK');
-      res.status(500).send('Error inserting data');
+    console.error('Error inserting data:', error);
+    await connection.query('ROLLBACK');
+    res.status(500).send('Error inserting data');
   }
 });
 
@@ -201,11 +202,10 @@ async function createQuestionTableIfNotExists() {
   }
 }
 
-const getStudentData = async (email)=>{
+const getStudentData = async (email) => {
   const searchQuery = 'SELECT * FROM user WHERE email=?'
-  const [result] = await connection.query(searchQuery,[email])
+  const [result] = await connection.query(searchQuery, [email])
   return result
-
 }
 router.post('/:id/startassessment', async (req, res) => {
   // const currentTime = new Date();
@@ -230,18 +230,16 @@ router.post('/:id/startassessment', async (req, res) => {
   // };
 
   // setTimeout(scheduleTask, delay);
-  const {studentData} = req.body
-  const assessmentLink = `${process.env.BASE_URL}/vts-assessment/${req.params.id}/login`
-  for(var i =0;i<studentData.length;i++)
-  {
+  const { studentData } = req.body
+  for (var i = 0; i < studentData.length; i++) {
     const email = studentData[i].email
     const data = await getStudentData(email)
     const name = data[0].fullname
-    const pwd = data[0].randomPassword
-    const college_Id = data[0].college_Id
-    await sendLoginCredentialsMail(name,college_Id,assessmentLink,pwd,email)
-    .then(res=>console.log("email sent to " , name))
-    .catch(err=>console.log("error sending mail"))
+
+    const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
+    await sendAssessmentEmailtoStudent(name, email, assessmentLink)
+      .then(res => console.log("email sent to ", name))
+      .catch(err => console.log("error sending mail"))
 
   }
 
@@ -269,25 +267,25 @@ router.get('/:assessmentId/start-time', async (req, res) => {
     res.status(500).send('Error retrieving start time');
   }
 });
-router.get("/:assessmentId/getQuestions",async (req,res)=>{
+router.get("/:assessmentId/getQuestions", async (req, res) => {
   const qnQuery = 'SELECT * FROM question WHERE assessmentId = ?'
-  const [questions] = await connection.query(qnQuery,[req.params.assessmentId])
+  const [questions] = await connection.query(qnQuery, [req.params.assessmentId])
   res.status(200).json(questions)
 })
 
-router.get("/:assessmentId/getreports",async (req,res)=>{
+router.get("/:assessmentId/getreports", async (req, res) => {
   const reportsQuery = `SELECT * FROM results WHERE assessmentId = ?`
-  const [results] = await connection.query(reportsQuery,[req.params.assessmentId])
+  const [results] = await connection.query(reportsQuery, [req.params.assessmentId])
   res.status(200).json(results)
 })
 
 
-router.post('/feedback',async (req,res)=>{
-  const {assessmentId,name,feedback,rating} = req.body
+router.post('/feedback', async (req, res) => {
+  const { assessmentId, name, feedback, rating } = req.body
   const query1 = 'CREATE TABLE IF NOT EXISTS feedback (assessmentid VARCHAR(255) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, feedback TEXT DEFAULT NULL, rating VARCHAR(255) DEFAULT NULL)';
   await connection.query(query1);
   const query3 = 'INSERT INTO feedback (assessmentid, name, feedback, rating) VALUES (?, ?, ?, ?)';
-  await connection.query(query3, [assessmentId,name,feedback,rating]);
+  await connection.query(query3, [assessmentId, name, feedback, rating]);
 
   res.status(201).json("thank you");
 

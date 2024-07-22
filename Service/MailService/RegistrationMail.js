@@ -1,5 +1,5 @@
 const mailSender = require("../MailService/Mailservice")
-const sendLoginCredentialsMail = async (email,assesmentLink) => {
+const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
     const mailOptions = {
         from: 'techteam@vtsenterprisesindia.com',
         to: email,
@@ -11,7 +11,7 @@ const sendLoginCredentialsMail = async (email,assesmentLink) => {
     <img src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1720537847/WhatsApp_Image_2024-07-09_at_8.34.38_PM_xtzvwx.jpg" alt="vts-banner-image" style="width:100%;height:auto;margin-bottom:4px;">
   </div>
   <div style="margin-bottom:20px;">
-    <p>Dear Candidate,</p>
+    <p>Dear ${name},</p>
     <p>We appreciate your interest in participating in the VTS Drive. We are pleased to inform you that you have registered for DRIVE 2025. Please read this mail carefully for further process and instructions.</p>
     <p>The recruitment process will include the following rounds:</p>
     <ul style="list-style-type:none;padding:0;">
