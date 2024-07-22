@@ -87,7 +87,7 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
         // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
         const insertUserQuery = `
         INSERT INTO user (
-            assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa
+            assessmentId, fullname, email, randomPassword, college_Id, college_name, dept
         ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
     const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", Department]);
