@@ -21,7 +21,57 @@ router.get('/getregistrations/:assessmentId', async (req, res) => {
     }
 });
 
+router.post('/:assessmentId/registerbyexcel', upload.single('file'), async (req, res) => {
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const users = xlsx.utils.sheet_to_json(worksheet);
+  
+    try {
+        connection.query('BEGIN');
+  
+        const [latestAsessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
+        const assessmentId = latestAsessmentId[0].assessmentid;
+        const driveDate = latestAsessmentId[0].drivedate;
+        const randomPassword = generateRandomPassword(8);
+        const createUserTableQuery = `
+            CREATE TABLE IF NOT EXISTS user (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                assessmentId VARCHAR(255),
+                fullname VARCHAR(255),
+                email VARCHAR(255),
+                randomPassword VARCHAR(8),
+                phone VARCHAR(255),
+                college_Id VARCHAR(255),
+                college_name VARCHAR(255),
+                course VARCHAR(255),
+                dept VARCHAR(255),
+                cgpa VARCHAR(255),
+                login_state BOOLEAN DEFAULT FALSE
+            )
+        `;
 
+        await connection.query(createUserTableQuery);
+  
+        const query1 = 'INSERT INTO user (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        for (var i = 0; i < users.length; i++) {
+          const user = users[i];
+          const { fullname, email, phone, college_Id, college_name, course, dept, cgpa, questions, attemptedquestions, correct, incorrect, score} = user;
+          const randomPassword = generateRandomPassword(8);
+        
+          const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+          const results = await connection.query(query1, [fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa, assessmentId, driveDate, questions, attemptedquestions, correct, incorrect, score]);
+  
+          console.log(results);
+        }
+        connection.query('COMMIT');
+        res.status(201).send("Successfully inserted data");
+  
+    } catch (error) {
+        console.error('Error inserting data:', error);
+        await connection.query('ROLLBACK');
+        res.status(500).send('Error inserting data');
+    }
+  });
 router.post('/:assessmentId/registrations', async (req, res) => {
     try {
         console.log(req.body);
@@ -123,7 +173,7 @@ router.post('/:assessmentId/results', async (req, res) => {
     try {
         console.log(req.body);
         const assessmentId = req.params.assessmentId;
-        const { name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber } = req.body;
+        const { name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason } = req.body;
 
         const createResultsTableQuery = `
             CREATE TABLE IF NOT EXISTS results (
@@ -138,7 +188,8 @@ router.post('/:assessmentId/results', async (req, res) => {
                 correct INT,
                 incorrect INT,
                 email VARCHAR(255),
-                phoneNumber VARCHAR(255)
+                phoneNumber VARCHAR(255),
+                reason VARCHAR(255)
             )
         `;
 
@@ -154,10 +205,10 @@ router.post('/:assessmentId/results', async (req, res) => {
 
         const insertResultQuery = `
             INSERT INTO results (
-                assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const results = await connection.query(insertResultQuery, [assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber]);
+        const results = await connection.query(insertResultQuery, [assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason]);
 
         res.status(200).json({ message: 'Successfully inserted results', results });
     } catch (error) {

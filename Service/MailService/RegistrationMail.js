@@ -20,14 +20,14 @@ const sendLoginCredentialsMail = async (email,assesmentLink) => {
       <li style="background:#f9f9f9;margin:5px 0;padding:5px;border-radius:5px;">• Technical Round</li>
       <li style="background:#f9f9f9;margin:5px 0;padding:5px;border-radius:5px;">• HR Round</li>
     </ul>
-    <p>INSTRUCTIONS:</p>
+    <strong><p>INSTRUCTIONS:</p></strong>
     <ol style="padding-left:20px;">
-      <li>The assessment link given below will redirect you to the assessment portal. The assessment link is unique for each individual and can only be accessed once.</li>
-      <li>Please avoid any attempts to access the assessment link unless you are ready to give the assessment.</li>
-      <li>Ensure you have a stable internet and power connection before accessing the assessment link. Any interruptions during the assessment may lead to the termination of the examination.</li>
+      <li><strong>The assessment link given below will redirect you to the assessment portal. The assessment link is unique for each individual and can only be accessed once.</strong></li>
+      <li><strong>Please avoid any attempts to access the assessment link unless you are ready to give the assessment.</strong></li>
+      <li><strong>Ensure you have a stable internet and power connection before accessing the assessment link. Any interruptions during the assessment may lead to the termination of the examination.</strong></li>
+      <li><strong>Tab switching and window switching is strictly not allowed. Any attempts to switch a tab or a window would not be tolerated and will further lead to the termination of the examination.</strong></li>
       <li>Confirm your details before you start the exam.</li>
       <li>The assessment portal can only be accessed on a desktop or a laptop. Avoid using your phone to access the examination link.</li>
-      <li>Tab switching and window switching is strictly not allowed. Any attempts to switch a tab or a window would not be tolerated and will further lead to the termination of the examination.</li>
       <li>The assessment consists of 60 questions and will include the following sections:</li>
     </ol>
     <ul style="list-style-type:none;padding:0;">

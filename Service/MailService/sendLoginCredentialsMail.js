@@ -26,11 +26,10 @@ async function sendAssessmentEmail(candidateName, college_Id, assessmentLink, ge
 
 <p><strong>Instructions:</strong></p>
 <ol>
-    <li>Please log in to the exam portal at least 15 minutes prior to the start of the assessment.</li>
     <li>Ensure you have a stable internet and power connection. Any interruptions during the exam may lead to the termination of the assessment.</li>
     <li>The assessment can only be taken on a desktop or a laptop.</li>
     <li>Tab switching is not allowed. Any attempts to switch tabs will not be tolerated and may lead to the termination of the assessment.</li>
-    <li>You will be monitored throughout the exam. Please ensure that your camera and microphone are functioning properly.</li>
+    
 </ol>
 <p>Wishing you the best of luck,</p>
 <p>HR Team<br>

@@ -74,7 +74,7 @@ router.post('/assessments', async (req, res) => {
     drivedate: formattedDate
   });
 });
-
+router.post('/')
 router.post('/:assessmentId/uploadquestions', upload.single('file'), async (req, res) => {
   const assessmentId = req.params.assessmentId;
   const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
@@ -115,6 +115,7 @@ router.post('/:assessmentId/uploadquestions', upload.single('file'), async (req,
     res.status(500).send('Error inserting data');
   }
 });
+
 
 async function createQuestionTableIfNotExists() {
   const createTableQuery = `
