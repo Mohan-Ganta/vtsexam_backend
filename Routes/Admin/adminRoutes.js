@@ -90,7 +90,7 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
             assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", dept]);
+    const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", Department]);
         console.log(results);
       }
       connection.query('COMMIT');
