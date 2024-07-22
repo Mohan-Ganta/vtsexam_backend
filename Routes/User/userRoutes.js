@@ -72,6 +72,22 @@ router.get('/getregistrations/:assessmentId', async (req, res) => {
 //         res.status(500).send('Error inserting data');
 //     }
 //   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.post('/:assessmentId/registrations', async (req, res) => {
     try {
         console.log(req.body);

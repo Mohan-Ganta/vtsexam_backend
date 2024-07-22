@@ -45,6 +45,69 @@ const generateRandomPassword = (length) => {
 //   });
 // });
 
+
+//----------------------------registration by excel sheet-------------------------------------
+
+
+
+router.post('/:assessmentId/usersregistration', upload.single('file'), async (req, res) => {
+  const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  const users = xlsx.utils.sheet_to_json(worksheet);
+
+  try {
+      connection.query('BEGIN');
+
+      // const [latestAsessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
+      // const assessmentId = latestAsessmentId[0].assessmentid;
+      // const driveDate = latestAsessmentId[0].drivedate;
+      // const randomPassword = generateRandomPassword(8);
+
+      //const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+      for (var i = 0; i < users.length; i++) {
+        const user = users[i];
+        const { Reg_Id,Name,Student_Email,Department} = user;
+        const assessmentId = req.params.assessmentId
+        const randomPassword = generateRandomPassword(8);
+        const createUserTableQuery = `
+        CREATE TABLE IF NOT EXISTS user (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            assessmentId VARCHAR(255),
+            fullname VARCHAR(255),
+            email VARCHAR(255),
+            randomPassword VARCHAR(8),
+            college_Id VARCHAR(255),
+            college_name VARCHAR(255),
+            dept VARCHAR(255),
+            login_state BOOLEAN DEFAULT FALSE
+        )
+    `;
+    await connection.query(createUserTableQuery);
+        // const query1 = 'INSERT INTO user (Reg_Id,Name,randomPassword,Student_Email,Department) VALUES (?,?,?,?,?)';
+        // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
+        const insertUserQuery = `
+        INSERT INTO user (
+            assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", dept]);
+        console.log(results);
+      }
+      connection.query('COMMIT');
+      res.status(201).send("Successfully inserted data");
+
+  } catch (error) {
+      console.error('Error inserting data:', error);
+      await connection.query('ROLLBACK');
+      res.status(500).send('Error inserting data');
+  }
+});
+
+
+
+
+
+
 router.post('/assessments', async (req, res) => {
   const { name, drivedate } = req.body;
   console.log(name, drivedate);
