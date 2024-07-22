@@ -118,14 +118,14 @@ router.post('/assessments', async (req, res) => {
 
   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
 
-  let newAssessmentId = "BCLG1";
+  let newAssessmentId = "KLUA1";
 
   if (latestAssessmentId && latestAssessmentId.length > 0) {
     const assessment = latestAssessmentId[0].assessmentid;
     const numericPart = assessment.match(/\d+/g).join('');
     const currentId = parseInt(numericPart, 10);
     const newId = currentId + 1;
-    newAssessmentId = `BCLG${newId}`;
+    newAssessmentId = `KLUA${newId}`;
   }
 
   const query3 = 'INSERT INTO assessmentids (assessmentid, name, drivedate, students) VALUES (?, ?, ?, ?)';
