@@ -189,13 +189,14 @@ router.post('/:assessmentId/results', async (req, res) => {
     try {
         console.log(req.body);
         const assessmentId = req.params.assessmentId;
-        const { name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason } = req.body;
+        const { name,gender, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason } = req.body;
 
         const createResultsTableQuery = `
             CREATE TABLE IF NOT EXISTS results (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 assessmentId VARCHAR(255),
                 name VARCHAR(255),
+                gender VARCHAR(255),
                 collegeId VARCHAR(255),
                 collegeName VARCHAR(255),
                 score INT,
@@ -221,10 +222,10 @@ router.post('/:assessmentId/results', async (req, res) => {
 
         const insertResultQuery = `
             INSERT INTO results (
-                assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                assessmentId, name,gender, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason
+            ) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)
         `;
-        const results = await connection.query(insertResultQuery, [assessmentId, name, collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason]);
+        const results = await connection.query(insertResultQuery, [assessmentId, name, gender ,collegeId, collegeName, score, attempted, unattempted, correct, incorrect, email, phoneNumber,reason]);
 
         res.status(200).json({ message: 'Successfully inserted results', results });
     } catch (error) {
