@@ -239,7 +239,7 @@ router.post('/:id/startassessment', async (req, res) => {
 
     const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
     await sendAssessmentEmailtoStudent(name, email, assessmentLink)
-      .then(res => console.log("email sent to ", name))
+      .then(res => console.log(`${i+1}. email sent to`, name))
       .catch(err => console.log("error sending mail"))
 
   }
