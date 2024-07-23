@@ -89,10 +89,10 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
       // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
       const insertUserQuery = `
         INSERT INTO user (
-            assessmentId, fullname,gender , email, randomPassword, college_Id, college_name, dept
-        ) VALUES (?, ?, ?, ?, ?, ?, ?,?)
+            assessmentId, fullname,gender , email, randomPassword, college_Id, college_name, dept,login_state
+        ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)
     `;
-      const results = await connection.query(insertUserQuery, [assessmentId, Name, Gender , Student_Email, randomPassword, Reg_Id, "KL University", Department]);
+      const results = await connection.query(insertUserQuery, [assessmentId, Name, Gender , Student_Email, randomPassword, Reg_Id, "KL University", Department,false]);
       console.log(results);
     }
     connection.query('COMMIT');
