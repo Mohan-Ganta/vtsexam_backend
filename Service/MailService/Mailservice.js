@@ -7,7 +7,7 @@ const mailSender = nodemailer.createTransport(
     pool:true,
     auth: {
       user: "techteam@vtsenterprisesindia.com",
-      pass: "gztsfpcdfoeayllj",
+      pass: "pftqlpjwbltcsyud",
     },
   }
 )
