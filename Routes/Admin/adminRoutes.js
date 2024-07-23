@@ -67,7 +67,7 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
     //const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     for (var i = 0; i < users.length; i++) {
       const user = users[i];
-      const { Reg_Id, Name, Student_Email, Department } = user;
+      const { Reg_Id, Name, Student_Email, Department ,Gender} = user;
       const assessmentId = req.params.assessmentId
       const randomPassword = generateRandomPassword(8);
       const createUserTableQuery = `
@@ -75,6 +75,7 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
             id INT AUTO_INCREMENT PRIMARY KEY,
             assessmentId VARCHAR(255),
             fullname VARCHAR(255),
+            gender VARCHAR(255),
             email VARCHAR(255),
             randomPassword VARCHAR(8),
             college_Id VARCHAR(255),
@@ -88,10 +89,10 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
       // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
       const insertUserQuery = `
         INSERT INTO user (
-            assessmentId, fullname, email, randomPassword, college_Id, college_name, dept
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            assessmentId, fullname,gender , email, randomPassword, college_Id, college_name, dept
+        ) VALUES (?, ?, ?, ?, ?, ?, ?,?)
     `;
-      const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, randomPassword, Reg_Id, "KLU", Department]);
+      const results = await connection.query(insertUserQuery, [assessmentId, Name, Gender , Student_Email, randomPassword, Reg_Id, "KL University", Department]);
       console.log(results);
     }
     connection.query('COMMIT');
