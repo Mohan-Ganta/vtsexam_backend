@@ -39,7 +39,7 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
       <li>The student will have 60 minutes to answer the 60 questions. The examination will automatically be submitted after the given time expires.</li>
     </ol>
     <p style="color:red">⚠ DO NOT REFRESH THE PAGE !!!</p>
-    <p style="background-color:yellow;"><strong>Assessment Link</strong> : <a href=${assesmentLink} >click here</a></p>
+    <p style="background-color:yellow;font:19px"><strong>Assessment Link</strong> : <a href=${assesmentLink} ><strong>CLICK HERE</strong></a></p>
     <p>We wish you the best of luck. Stay calm, read each question carefully and give it your best effort. If you have any further queries or need assistance, contact us at <a href="mailto:talent@vtsenterprisesindia.com">talent@vtsenterprisesindia.com</a>.</p>
   </div>
   <div style="padding:10px;margin-top:20px;">
