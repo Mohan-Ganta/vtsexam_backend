@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../../dbConnection');
 const crypto = require('crypto');
+const { col } = require('sequelize');
 // const sendSuccessfulRegMail = require("../../Service/MailService/RegistrationMail");
 
 const generateRandomPassword = (length) => {
@@ -126,7 +127,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
             assessmentId, fullname,email,gender , randomPassword, phone ,college_Id, college_name,course, dept,cgpa ,login_state
         ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
-      const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, Gender, randomPassword, Phone, Reg_Id, "KSR COLLEGE", Course, Department, cgpa, false]);
+      const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, gender, randomPassword, phone, college_Id, "KSR COLLEGE", course, dept, cgpa, false]);
       console.log(results);
       connection.query('COMMIT');
     

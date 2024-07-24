@@ -1,9 +1,9 @@
 const mailSender = require("../MailService/Mailservice")
-const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
+const sendNewregistrationMail = async (email,reglink) => {
     const mailOptions = {
         from: 'techteam@vtsenterprisesindia.com',
         to: email,
-        subject: 'VTS Drive 2025 Batch Assessment Link !!!',
+        subject: 'VTS Drive 2025 Batch Assessment Registration Link !!!',
         html: `
 
       <div style="width:100%;max-width:600px;margin:0 auto;padding:20px;border:1px solid #ccc;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:Arial,sans-serif;line-height:1.6;">
@@ -11,8 +11,8 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
     <img src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1720537847/WhatsApp_Image_2024-07-09_at_8.34.38_PM_xtzvwx.jpg" alt="vts-banner-image" style="width:100%;height:auto;margin-bottom:4px;">
   </div>
   <div style="margin-bottom:20px;">
-    <p>Dear ${name},</p>
-    <p>We appreciate your interest in participating in the VTS Drive. We are pleased to inform you that you have registered for DRIVE 2025. Please read this mail carefully for further process and instructions.</p>
+    <p>Dear Candidate,</p>
+    <p>We appreciate your interest in participating in the VTS Drive. Please use the registration link provided below to register and complete your assessment:</p>
     <p>The recruitment process will include the following rounds:</p>
     <ul style="list-style-type:none;padding:0;">
       <li style="background:#f9f9f9;margin:5px 0;padding:5px;border-radius:5px;">• Aptitude Round</li>
@@ -39,7 +39,7 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
       <li>The student will have 60 minutes to answer the 60 questions. The examination will automatically be submitted after the given time expires.</li>
     </ol>
     <p style="color:red">⚠ DO NOT REFRESH THE PAGE !!!</p>
-    <p style="background-color:yellow;font:19px"><strong>Assessment Link</strong> : <a href=${assesmentLink} ><strong>CLICK HERE</strong></a></p>
+    <p style="background-color:yellow;font:19px"><strong>Assessment Registration Link</strong> : <a href=${reglink} ><strong>CLICK HERE</strong></a></p>
     <p>We wish you the best of luck. Stay calm, read each question carefully and give it your best effort. If you have any further queries or need assistance, contact us at <a href="mailto:talent@vtsenterprisesindia.com">talent@vtsenterprisesindia.com</a>.</p>
   </div>
   <div style="padding:10px;margin-top:20px;">
@@ -49,6 +49,7 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
     <p style="font-size:12px;"><i>This is an automated message. Please do not reply to this email.</i></p>
   </div>
 </div>
+
 
         `,
     };
@@ -61,4 +62,4 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
     }
 };
 
-module.exports = sendLoginCredentialsMail;
+module.exports = sendNewregistrationMail;

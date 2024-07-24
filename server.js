@@ -18,6 +18,8 @@ app.get('/sendmail',async (req,res)=>{
     res.send("mail sent")
 })
 
+
+
 app.get("/",(req,res)=>{
     res.send("Hello guru")
 })

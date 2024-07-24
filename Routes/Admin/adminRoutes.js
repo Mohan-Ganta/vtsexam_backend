@@ -8,13 +8,20 @@ const upload = multer({ storage: storage });
 const crypto = require('crypto');
 // const sendLoginCredentialsMail = require('../../Service/MailService/sendLoginCredentialsMail');
 const sendAssessmentEmailtoStudent = require('../../Service/MailService/RegistrationMail')
-
+const newRegistrationMailtoStudent = require('../../Service/MailService/NewRegistrationMail')
 const { send } = require('process');
 
 const generateRandomPassword = (length) => {
   return crypto.randomBytes(length).toString('hex').slice(0, length);
 };
 
+
+router.post("/sendnewregmail",async(req,res)=>{
+  const {mail,reglink} = req.body
+  await newRegistrationMailtoStudent(mail,reglink)
+  .then(resp=>res.send("Mail sent"))
+  .catch(err=>res.send(err))
+})
 
 // router.post('/assessments', async (req, res) => {
 //   const { name, drivedate } = req.body;
