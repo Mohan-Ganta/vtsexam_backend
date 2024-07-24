@@ -33,8 +33,8 @@ router.post('/sendalertmail',async(req,res)=>{
 router.post('/sendsuccessfulsubmissionmail',async(req,res)=>{
   const {name,mail} = req.body
   await sendalertMailtostd(mail,name)
-  .then(()=>console.log("MalPractice Mail sent Successfully"))
-  .catch((err)=>console.log(err))
+  .then(()=>res.send("Submission Mail sent Successfully"))
+  .catch((err)=>res.send(err))
 })
 
 // router.post('/assessments', async (req, res) => {
