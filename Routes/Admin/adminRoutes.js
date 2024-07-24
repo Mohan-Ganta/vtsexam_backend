@@ -9,6 +9,7 @@ const crypto = require('crypto');
 // const sendLoginCredentialsMail = require('../../Service/MailService/sendLoginCredentialsMail');
 const sendAssessmentEmailtoStudent = require('../../Service/MailService/RegistrationMail')
 const newRegistrationMailtoStudent = require('../../Service/MailService/NewRegistrationMail')
+const sendalertMailtostd = require('../../Service/MailService/submissionAlertMail')
 const { send } = require('process');
 
 const generateRandomPassword = (length) => {
@@ -19,10 +20,15 @@ const generateRandomPassword = (length) => {
 router.post("/sendnewregmail",async(req,res)=>{
   const {mail,reglink} = req.body
   await newRegistrationMailtoStudent(mail,reglink)
-  .then(resp=>res.send("Mail sent"))
+  .then(resp=>res.send("Reg Link Mail sent"))
   .catch(err=>res.send(err))
 })
-
+router.post('/sendalertmail',async(req,res)=>{
+  const {name,mail} = req.body
+  await sendalertMailtostd(mail,name)
+  .then(()=>console.log("MalPractice Mail sent Successfully"))
+  .catch((err)=>console.log(err))
+})
 // router.post('/assessments', async (req, res) => {
 //   const { name, drivedate } = req.body;
 //   console.log(name,drivedate)
