@@ -120,7 +120,8 @@ router.post("/:assessmentId/:stId/resettest",async(req,res)=>{
   else{
     const query = `UPDATE user SET login_state = '0' WHERE college_Id = ? AND assessmentId = ?;`
     const deleteResult = `DELETE FROM user WHERE assessmentId = ? AND college_Id = ?;`
-    await connection.query(deleteResult,[assessmentId,college_Id])
+    const [result ] = await connection.query(deleteResult,[assessmentId,stdId])
+    console.log(result)
     await connection.query(query,[stdId,assessmentId])
     .then(response=>res.send("Test reset Successful"))
     .catch(err=>res.send(err))
