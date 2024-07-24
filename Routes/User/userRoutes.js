@@ -103,17 +103,17 @@ router.post('/:assessmentId/registrations', async (req, res) => {
                 email VARCHAR(255),
                 gender VARCHAR(255),
                 randomPassword VARCHAR(8),
-                phone VARCHAR(255),
+                phone VARCHAR(255) DEFAULT NULL,
                 college_Id VARCHAR(255),
                 college_name VARCHAR(255),
-                course VARCHAR(255),
+                course VARCHAR(255) DEFAULT NULL,
                 dept VARCHAR(255),
-                cgpa VARCHAR(255),
+                cgpa VARCHAR(255) DEFAULT NULL,
                 login_state BOOLEAN DEFAULT FALSE
             )
         `;
 
-        await connection.query(createUserTableQuery);
+      await connection.query(createUserTableQuery);
 
         const existingUserQuery = 'SELECT * FROM user WHERE email = ?';
         const [existingUser] = await connection.query(existingUserQuery, [email]);
@@ -122,11 +122,14 @@ router.post('/:assessmentId/registrations', async (req, res) => {
         }
 
         const insertUserQuery = `
-            INSERT INTO user (
-                assessmentId, fullname, email,gender , randomPassword, phone, college_Id, college_name, course, dept, cgpa
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        const results = await connection.query(insertUserQuery, [assessmentId, fullname, email,gender, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
+        INSERT INTO user (
+            assessmentId, fullname,email,gender , randomPassword, phone ,college_Id, college_name,course, dept,cgpa ,login_state
+        ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
+    `;
+      const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, Gender, randomPassword, Phone, Reg_Id, "KSR COLLEGE", Course, Department, cgpa, false]);
+      console.log(results);
+      connection.query('COMMIT');
+    
 
         const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
         // await sendSuccessfulRegMail(email,assessmentLink);
