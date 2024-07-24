@@ -17,7 +17,6 @@ const generateRandomPassword = (length) => {
   return crypto.randomBytes(length).toString('hex').slice(0, length);
 };
 
-
 router.post("/sendnewregmail",async(req,res)=>{
   const {mail,reglink} = req.body
   await newRegistrationMailtoStudent(mail,reglink)
@@ -32,7 +31,7 @@ router.post('/sendalertmail',async(req,res)=>{
 })
 router.post('/sendsuccessfulsubmissionmail',async(req,res)=>{
   const {name,mail} = req.body
-  await sendalertMailtostd(mail,name)
+  await sendSuccessfulSubmissionMail(mail,name)
   .then(()=>res.send("Submission Mail sent Successfully"))
   .catch((err)=>res.send(err))
 })
