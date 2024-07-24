@@ -67,32 +67,36 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
     //const query1 = 'INSERT INTO registration (fullname,email,randomPassword,phone,college_Id,college_name,course,dept,cgpa,assessmentId, drivedate,questions,attemptedquestions,correct,incorrect,score) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     for (var i = 0; i < users.length; i++) {
       const user = users[i];
-      const { Reg_Id, Name, Student_Email, Department ,Gender} = user;
+      const { Reg_Id, Name, Student_Email, Course, Department, Gender, Phone, cgpa } = user;
       const assessmentId = req.params.assessmentId
       const randomPassword = generateRandomPassword(8);
       const createUserTableQuery = `
-        CREATE TABLE IF NOT EXISTS user (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            assessmentId VARCHAR(255),
-            fullname VARCHAR(255),
-            gender VARCHAR(255),
-            email VARCHAR(255),
-            randomPassword VARCHAR(8),
-            college_Id VARCHAR(255),
-            college_name VARCHAR(255),
-            dept VARCHAR(255),
-            login_state BOOLEAN DEFAULT FALSE
-        )
-    `;
+            CREATE TABLE IF NOT EXISTS user (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                assessmentId VARCHAR(255),
+                fullname VARCHAR(255),
+                email VARCHAR(255),
+                gender VARCHAR(255),
+                randomPassword VARCHAR(8),
+                phone VARCHAR(255) DEFAULT NULL,
+                college_Id VARCHAR(255),
+                college_name VARCHAR(255),
+                course VARCHAR(255) DEFAULT NULL,
+                dept VARCHAR(255),
+                cgpa VARCHAR(255) DEFAULT NULL,
+                login_state BOOLEAN DEFAULT FALSE
+            )
+        `;
+
       await connection.query(createUserTableQuery);
       // const query1 = 'INSERT INTO user (Reg_Id,Name,randomPassword,Student_Email,Department) VALUES (?,?,?,?,?)';
       // const results = await connection.query(query1,[Reg_Id,Name,randomPassword,Student_Email,Department]);
       const insertUserQuery = `
         INSERT INTO user (
-            assessmentId, fullname,gender , email, randomPassword, college_Id, college_name, dept,login_state
-        ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)
+            assessmentId, fullname,email,gender , randomPassword, phone ,college_Id, college_name,course, dept,cgpa ,login_state
+        ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
-      const results = await connection.query(insertUserQuery, [assessmentId, Name, Gender , Student_Email, randomPassword, Reg_Id, "KL University", Department,false]);
+      const results = await connection.query(insertUserQuery, [assessmentId, Name, Student_Email, Gender, randomPassword, Phone, Reg_Id, "KSR COLLEGE", Course, Department, cgpa, false]);
       console.log(results);
     }
     connection.query('COMMIT');
@@ -105,7 +109,24 @@ router.post('/:assessmentId/usersregistration', upload.single('file'), async (re
   }
 });
 
-
+router.post("/:assessmentId/:stId/resettest",async(req,res)=>{
+  const assessmentId = req.params.assessmentId 
+  const stdId = req.params.stId
+  const searchStudent = `SELECT * FROM user WHERE college_Id = ? AND assessmentId = ?;`
+  const [user] = await connection.query(searchStudent,[stdId,assessmentId])
+  console.log(user)
+  if(user.length==0)
+    res.status(404).send("Student ID doesn't exist!")
+  else{
+    const query = `UPDATE user SET login_state = '0' WHERE college_Id = ? AND assessmentId = ?;`
+    const deleteResult = `DELETE FROM user WHERE assessmentId = ? AND college_Id = ?;`
+    await connection.query(deleteResult,[assessmentId,college_Id])
+    await connection.query(query,[stdId,assessmentId])
+    .then(response=>res.send("Test reset Successful"))
+    .catch(err=>res.send(err))
+  }
+  
+})
 
 
 
@@ -239,9 +260,8 @@ router.post('/:id/startassessment', async (req, res) => {
 
     const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
     await sendAssessmentEmailtoStudent(name, email, assessmentLink)
-      .then(res => console.log(`${i+1}. email sent to`, name))
+      .then(res => console.log(`${i + 1}. email sent to`, name))
       .catch(err => console.log("error sending mail"))
-
   }
 
 

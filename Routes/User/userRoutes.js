@@ -92,7 +92,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
     try {
         console.log(req.body);
         const assessmentId = req.params.assessmentId;
-        const { fullname, email, phone, college_Id, college_name, course, dept, cgpa } = req.body;
+        const { fullname, email, phone, gender , college_Id, college_name, course, dept, cgpa } = req.body;
         const randomPassword = generateRandomPassword(8);
 
         const createUserTableQuery = `
@@ -101,6 +101,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
                 assessmentId VARCHAR(255),
                 fullname VARCHAR(255),
                 email VARCHAR(255),
+                gender VARCHAR(255),
                 randomPassword VARCHAR(8),
                 phone VARCHAR(255),
                 college_Id VARCHAR(255),
@@ -122,10 +123,10 @@ router.post('/:assessmentId/registrations', async (req, res) => {
 
         const insertUserQuery = `
             INSERT INTO user (
-                assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                assessmentId, fullname, email,gender , randomPassword, phone, college_Id, college_name, course, dept, cgpa
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
+        const results = await connection.query(insertUserQuery, [assessmentId, fullname, email,gender, randomPassword, phone, college_Id, college_name, course, dept, cgpa]);
 
         const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${assessmentId}/${college_Id}/${randomPassword}`
         // await sendSuccessfulRegMail(email,assessmentLink);
