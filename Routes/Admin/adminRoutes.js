@@ -119,7 +119,7 @@ router.post("/:assessmentId/:stId/resettest",async(req,res)=>{
     res.status(404).send("Student ID doesn't exist!")
   else{
     const query = `UPDATE user SET login_state = '0' WHERE college_Id = ? AND assessmentId = ?;`
-    const deleteResult = `DELETE FROM user WHERE assessmentId = ? AND college_Id = ?;`
+    const deleteResult = `DELETE FROM results WHERE assessmentId = ? AND college_Id = ?;`
     const [result ] = await connection.query(deleteResult,[assessmentId,stdId])
     console.log(result)
     await connection.query(query,[stdId,assessmentId])
