@@ -26,6 +26,7 @@ const sendNewregistrationMail = async (email,reglink) => {
       <li><strong>Please avoid any attempts to access the assessment link unless you are ready to give the assessment.</strong></li>
       <li>Ensure you have a <strong>stable internet and power connection </strong>before accessing the assessment link. <strong>Any interruptions during the assessment may lead to the termination of the examination.</strong></li>
       <li>Tab switching and window switching is strictly not allowed.<strong> Any attempts to switch a tab or minimizing the window for more than twice</strong> will further lead to the termination of the examination.</li>
+      <li>To avoid disruptions during the test, please <strong>extend your system's sleep timeout</strong> to prevent the screen from entering sleep mode. If the screen does sleep and causes a tab switch, a warning message may be issued. Repeated warnings (more than twice) will result in the <strong>automatic submission</strong> of your test.</li>
       <li>Confirm your details before you start the exam.</li>
       <li>The assessment portal can only be accessed on a desktop or a laptop. Avoid using your phone to access the examination link.</li>
       <li>The assessment consists of 60 questions and will include the following sections:</li>

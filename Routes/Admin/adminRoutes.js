@@ -162,14 +162,14 @@ router.post('/assessments', async (req, res) => {
 
   const [latestAssessmentId] = await connection.query('SELECT * FROM assessmentids ORDER BY assessmentid DESC LIMIT 1');
 
-  let newAssessmentId = "KLUA1";
+  let newAssessmentId = "ASMT1";
 
   if (latestAssessmentId && latestAssessmentId.length > 0) {
     const assessment = latestAssessmentId[0].assessmentid;
     const numericPart = assessment.match(/\d+/g).join('');
     const currentId = parseInt(numericPart, 10);
     const newId = currentId + 1;
-    newAssessmentId = `KLUA${newId}`;
+    newAssessmentId = `ASMT${newId}`;
   }
 
   const query3 = 'INSERT INTO assessmentids (assessmentid, name, drivedate, students) VALUES (?, ?, ?, ?)';
@@ -202,7 +202,7 @@ router.post('/:assessmentId/uploadquestions', upload.single('file'), async (req,
         4: questions[i][4]
       });
 
-      const result = await connection.query(query, [
+      const [result] = await connection.query(query, [
         assessmentId,
         questions[i].Image,
         questions[i].Questions,
@@ -210,7 +210,7 @@ router.post('/:assessmentId/uploadquestions', upload.single('file'), async (req,
         questions[i].Solution,
         null
       ]);
-      console.log(`Inserted question ${i + 1}: ${result.insertId}`);
+      console.log(`Inserted question ${i + 1}: ${result}`);
     }
 
     await connection.query('COMMIT');
@@ -280,9 +280,9 @@ router.post('/:id/startassessment', async (req, res) => {
     const name = data[0].fullname
 
     const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
-    // await sendAssessmentEmailtoStudent(name, email, assessmentLink)
-    //   .then(res => console.log(`${i + 1}. email sent to`, name))
-    //   .catch(err => console.log("error sending mail"))
+    await sendAssessmentEmailtoStudent(name, email, assessmentLink)
+      .then(res => console.log(`${i + 1}. email sent to`, name))
+      .catch(err => console.log("error sending mail"))
     console.log("mail sending to " ,email)
   }
 
