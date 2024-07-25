@@ -12,7 +12,7 @@ const sendMalpracticeMail = async (email,name) => {
           <img src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1720537847/WhatsApp_Image_2024-07-09_at_8.34.38_PM_xtzvwx.jpg" alt="VTS Banner Image" style="width:100%;height:auto;margin-bottom:4px;">
         </div>
         <div style="margin-bottom:20px;">
-          <p>Dear ${name},</p>
+          <p>Dear Candidate,</p>
           <p>Thank you for submitting your test.<p style="color:green">Test Submitted Successfully.</p></p>
           <p>We appreciate your effort and dedication. Keep up the good work!</p>
           <p>If you have any questions or need further assistance, please contact our support team.</p>

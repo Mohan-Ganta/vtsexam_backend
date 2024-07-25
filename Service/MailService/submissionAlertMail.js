@@ -11,7 +11,7 @@ const sendMalpracticeMail = async (email,name) => {
           <img src="https://res.cloudinary.com/dvmkt80vc/image/upload/v1720537847/WhatsApp_Image_2024-07-09_at_8.34.38_PM_xtzvwx.jpg" alt="vts-banner-image" style="width:100%;height:auto;margin-bottom:4px;">
         </div>
         <div style="margin-bottom:20px;">
-          <p>Dear ${name},</p>
+          <p>Dear Candidate,</p>
           <p>We regret to inform you that your test was submitted due to <strong style="color:red">Malpractice</strong>.</p>
           <p>Despite receiving alerts regarding malpractice, the issue persisted, leading to the automatic submission of your test. Our monitoring system identified multiple infractions, including:</p>
           <ul style="list-style-type:none;padding:0;">
