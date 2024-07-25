@@ -283,7 +283,7 @@ router.post('/:id/startassessment', async (req, res) => {
     await sendAssessmentEmailtoStudent(name, email, assessmentLink)
       .then(res => console.log(`${i + 1}. email sent to`, name))
       .catch(err => console.log("error sending mail"))
-    console.log("mail sending to " ,email)
+ 
   }
 
 
