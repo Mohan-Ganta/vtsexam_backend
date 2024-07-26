@@ -127,7 +127,7 @@ router.post('/:assessmentId/registrations', async (req, res) => {
             assessmentId, fullname,email,gender , randomPassword, phone ,college_Id, college_name,course, dept,cgpa ,login_state
         ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
-      const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, gender, randomPassword, phone, college_Id, "KSR COLLEGE", course, dept, cgpa, false]);
+      const results = await connection.query(insertUserQuery, [assessmentId, fullname, email, gender, randomPassword, phone, college_Id, college_name, course, dept, cgpa, false]);
       console.log(results);
       connection.query('COMMIT');
     
