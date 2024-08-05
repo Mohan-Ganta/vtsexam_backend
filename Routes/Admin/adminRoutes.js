@@ -250,6 +250,8 @@ const getStudentData = async (email) => {
   const [result] = await connection.query(searchQuery, [email])
   return result
 }
+
+
 // router.post('/:id/startassessment', async (req, res) => {
 //   const currentTime = new Date();
 //   const targetTime = new Date();
