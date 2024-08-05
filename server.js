@@ -21,7 +21,7 @@ app.get('/sendmail',async (req,res)=>{
 
 
 app.get("/",(req,res)=>{
-    res.send("Hello guru")
+    res.send("Hello there ")
 })
 app.listen(5000,()=>{
     console.log("Server is running at port 5000")
