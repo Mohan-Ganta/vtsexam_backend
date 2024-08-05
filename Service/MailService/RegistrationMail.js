@@ -57,8 +57,10 @@ const sendLoginCredentialsMail = async (name,email,assesmentLink) => {
     try {
         let info = await mailSender.sendMail(mailOptions);
         console.log("Registration Email sent: " + info.response);
+        return true
     } catch (error) {
         console.error("Error sending email: ", error);
+        return false
     }
 };
 

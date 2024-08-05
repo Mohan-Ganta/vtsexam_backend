@@ -250,44 +250,64 @@ const getStudentData = async (email) => {
   const [result] = await connection.query(searchQuery, [email])
   return result
 }
+// router.post('/:id/startassessment', async (req, res) => {
+//   const currentTime = new Date();
+//   const targetTime = new Date();
+//   targetTime.setHours(21, 34, 0, 0);
+//   console.log(currentTime)
+//   console.log(targetTime)
+//   if (currentTime >= targetTime) {
+//     targetTime.setDate(targetTime.getDate() + 1);
+//   }
+//   const delay = targetTime - currentTime;
+//   console.log(`exam will start after ${delay}`)
+
+//   const scheduleTask = async () => {
+//     try {
+//       console.log("Assesment is started");
+//       res.send('Assessment started and questions have been sent.');
+//     } catch (error) {
+//       console.error('Error starting assessment:', error);
+//       res.status(500).send('Error starting assessment');
+//     }
+//   };
+
+//   setTimeout(scheduleTask, delay);
+//   const { studentData } = req.body
+//   for (var i = 0; i < studentData.length; i++) {
+//     const email = studentData[i].email
+//     const data = await getStudentData(email)
+//     const name = data[0].fullname
+
+//     const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
+//     await sendAssessmentEmailtoStudent(name, email, assessmentLink)
+//       .then(res => console.log(`${i + 1}. email sent to`, name))
+//       .catch(err => console.log("error sending mail"))
+ 
+//   }
+
+
+// });
+
 router.post('/:id/startassessment', async (req, res) => {
-  // const currentTime = new Date();
-  // const targetTime = new Date();
-  // targetTime.setHours(21, 34, 0, 0);
-  // console.log(currentTime)
-  // console.log(targetTime)
-  // if (currentTime >= targetTime) {
-  //   targetTime.setDate(targetTime.getDate() + 1);
-  // }
-  // const delay = targetTime - currentTime;
-  // console.log(`exam will start after ${delay}`)
 
-  // const scheduleTask = async () => {
-  //   try {
-  //     console.log("Assesment is started");
-  //     res.send('Assessment started and questions have been sent.');
-  //   } catch (error) {
-  //     console.error('Error starting assessment:', error);
-  //     res.status(500).send('Error starting assessment');
-  //   }
-  // };
-
-  // setTimeout(scheduleTask, delay);
-  const { studentData } = req.body
-  for (var i = 0; i < studentData.length; i++) {
-    const email = studentData[i].email
+    const {email}  = req.body
     const data = await getStudentData(email)
     const name = data[0].fullname
-
     const assessmentLink = `${process.env.BASE_URL}/vts-drive2025/${req.params.id}/${data[0].college_Id}/${data[0].randomPassword}`
-    await sendAssessmentEmailtoStudent(name, email, assessmentLink)
-      .then(res => console.log(`${i + 1}. email sent to`, name))
-      .catch(err => console.log("error sending mail"))
- 
-  }
+    const result = await sendAssessmentEmailtoStudent(name,email,assessmentLink)
+    if(result){
+      console.log("mail sent to ",name)
+      res.send("Mail sent Successfully")
+    }
+    else{
+      console.log("Error sending mail to ",name)
+      res.status(404).send("Error sending mail")
+    }
 
+}
 
-});
+);
 router.get('/getassessments', async (req, res) => {
   try {
     const [assessments] = await connection.query('SELECT * FROM assessmentids');
@@ -321,7 +341,6 @@ router.get("/:assessmentId/getreports", async (req, res) => {
   const [results] = await connection.query(reportsQuery, [req.params.assessmentId])
   res.status(200).json(results)
 })
-
 
 router.post('/feedback', async (req, res) => {
   const { assessmentId, name, feedback, rating } = req.body
