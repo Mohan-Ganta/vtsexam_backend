@@ -8,6 +8,7 @@ const mailSender = nodemailer.createTransport(
     auth: {
       user: "talent@vtsenterprisesindia.com",
       pass: "nqdahkmxgkbuumkk",
+      
     },
   }
 )
